@@ -3,15 +3,6 @@
 import MessageItem from "./MessageItem.vue";
 import type { ChatMessage } from "../../types/chat"
 
-
-type Variant = "user" | "assistant";
-
-export type UiMessage = {
-    id: string;
-    variant: Variant;
-    text: string;
-};
-
 const props = defineProps<{
     messages: ChatMessage[];
 }>();
