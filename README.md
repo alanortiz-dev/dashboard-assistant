@@ -1,4 +1,4 @@
-# 🗂️ Kalanban - Tablero de tareas estilo Kanban
+# Dashboard Chat Assistant - Technical challenge project!
 
 ![Vue Badge](https://img.shields.io/badge/Vue_3-42B883?logo=vue.js&logoColor=fff&style=flat)
 ![TypeScript Badge](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=flat)
