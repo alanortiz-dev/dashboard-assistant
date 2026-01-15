@@ -23,8 +23,6 @@ function toggleChat() {
   <div class="app">
     <h1>Dashboard Assistant</h1>
 
-    <p>Chat open: {{ isChatOpen }}</p>
-
     <ChatFabButton :isOpen="isChatOpen" @toggle="toggleChat" />
     <ChatWindow v-if="isChatOpen" @close="toggleChat" />
   </div>

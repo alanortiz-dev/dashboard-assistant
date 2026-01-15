@@ -27,19 +27,18 @@ const props = defineProps<{
     </div>
 </template>
 <style scoped>
-/* fila completa para poder alinear izquierda/derecha */
 .row {
     display: flex;
     margin: 6px 0;
 }
 
-/* si es user → derecha */
+/* if it is user: right */
 .row.user {
     justify-content: flex-end;
     padding-top: 3px;
 }
 
-/* si es assistant → izquierda */
+/* if assistant: left */
 .row.assistant {
     justify-content: flex-start;
     padding-top: 3px;
@@ -61,7 +60,7 @@ const props = defineProps<{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-/* estilos distintos según quién lo manda */
+/* Styles for user */
 .row.user .bubble {
     background: #5cbbec;
     color: #fff;
@@ -70,6 +69,7 @@ const props = defineProps<{
     text-justify: inter-word;
 }
 
+/* Styles for user */
 .row.assistant .bubble {
     background: #E7E7E7;
     color: #111;
