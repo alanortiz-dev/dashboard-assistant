@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import openIcon from '../../assets/open-button.icon.svg'
 import closeIcon from '../../assets/close-button.icon.svg'
+
+//isOpen prop to determine the state of the chat window
 const props = defineProps<{
     isOpen: boolean;
 }>();
@@ -21,6 +23,7 @@ function onClick() {
 </template>
 
 <style scoped>
+/* Floating action button styles */
 .fab {
     position: fixed;
     right: 16px;

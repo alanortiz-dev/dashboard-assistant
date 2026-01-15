@@ -52,8 +52,8 @@ onMounted(() => {
             <template v-else>
                 <MessageList :messages="messages" :disabled="isTyping || isLoadingHistory"
                     @reward-redeem="redeemReward" />
+                <MessageBubble v-if="isTyping" role="assistant" text="" :typing="true" />
 
-                <MessageBubble v-if="isTyping" role="assistant" text="Typing…" />
                 <div ref="endRef" />
             </template>
         </section>

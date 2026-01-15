@@ -3,7 +3,8 @@ type Role = "user" | "assistant";
 
 const props = defineProps<{
     role: Role;
-    text: string;
+    text?: string;
+    typing?: boolean;
 }>();
 
 </script>
@@ -11,11 +12,20 @@ const props = defineProps<{
 <template>
     <div class="row" :class="props.role">
         <div class="bubble">
-            {{ props.text }}
+            <template v-if="props.typing">
+                <span class="typing" role="status" aria-label="Assistant is typing">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </span>
+            </template>
+
+            <template v-else>
+                {{ props.text ?? "" }}
+            </template>
         </div>
     </div>
 </template>
-
 <style scoped>
 /* fila completa para poder alinear izquierda/derecha */
 .row {
@@ -66,5 +76,50 @@ const props = defineProps<{
     border-bottom-left-radius: 6px;
     text-align: justify;
     text-justify: inter-word;
+}
+
+.typing {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.35;
+    animation: typingDot 1.2s infinite ease-in-out;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingDot {
+
+    0%,
+    80%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.35;
+    }
+
+    40% {
+        transform: translateY(-3px);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dot {
+        animation: none;
+        opacity: 0.6;
+    }
 }
 </style>
