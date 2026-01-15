@@ -27,7 +27,6 @@ function onRewardRedeem() {
     </div>
 
     <div v-else>
-        <!-- reward -->
         <div class="row assistant">
             <RewardCard :title="props.message.payload.title" :points="props.message.payload.points"
                 :imageUrl="props.message.payload.imageUrl" :disabled="props.disabled" @redeem="onRewardRedeem" />

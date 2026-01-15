@@ -23,7 +23,6 @@ function toggleChat() {
   <div class="app">
     <h1>Dashboard Assistant</h1>
 
-    <!-- Debug temporal para confirmar que funciona -->
     <p>Chat open: {{ isChatOpen }}</p>
 
     <ChatFabButton :isOpen="isChatOpen" @toggle="toggleChat" />
@@ -33,7 +32,7 @@ function toggleChat() {
 </template>
 
 <style scoped>
-/* Estilos que ya venian incluidos  */
+/* Vite starter styles (kept intentionally) */
 .logo {
   height: 6em;
   padding: 1.5em;

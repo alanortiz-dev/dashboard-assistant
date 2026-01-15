@@ -1,6 +1,11 @@
 import { ref } from "vue";
 import type { ChatMessage } from "../types/chat";
 
+const HISTORY_LOAD_DELAY_MS = 400;
+const ASSISTANT_TEXT_DELAY_MS = 1000;
+const REWARD_CARD_DELAY_MS = 1000; // aligns with “after 1 second” expectation
+const REDEEM_CONFIRM_DELAY_MS = 1500;
+
 export function useChat() {
     const messages = ref<ChatMessage[]>([]);
     const isTyping = ref(false);
@@ -32,7 +37,7 @@ export function useChat() {
                 },
             ];
             isLoadingHistory.value = false;
-        }, 400);
+        }, HISTORY_LOAD_DELAY_MS);
     }
 
     function sendText(text: string) {
@@ -40,7 +45,7 @@ export function useChat() {
         if (!clean) return;
         if (isTyping.value) return;
 
-        // 1) User message
+        // (1) Append the user's message to the chat stream
         messages.value.push({
             id: crypto.randomUUID(),
             role: "user",
@@ -48,13 +53,13 @@ export function useChat() {
             text: clean,
         });
 
-        // 2) Start typing
+        // (2) Start the assistant response sequence (typing → text → typing → reward)
         isTyping.value = true;
 
-        // Step A: typing -> assistant text
         setTimeout(() => {
             isTyping.value = false;
 
+            // (2a) First assistant reply as plain text
             messages.value.push({
                 id: crypto.randomUUID(),
                 role: "assistant",
@@ -62,12 +67,13 @@ export function useChat() {
                 text: "Sure. Here’s your latest reward. Give me a second to load it.",
             });
 
-            // Step B: typing again -> reward card
+            // (2b) Simulate a short wait before showing the reward card
             isTyping.value = true;
 
             setTimeout(() => {
                 isTyping.value = false;
 
+                // (3) Render the reward as a widget message
                 messages.value.push({
                     id: crypto.randomUUID(),
                     role: "assistant",
@@ -78,16 +84,14 @@ export function useChat() {
                         imageUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=strong",
                     },
                 });
-            }, 2000);
-        }, 700);
+            }, REWARD_CARD_DELAY_MS);
+        }, ASSISTANT_TEXT_DELAY_MS);
     }
-
-
 
     function redeemReward(payload: { title: string; points: number }) {
         if (isTyping.value || isLoadingHistory.value) return;
 
-        // Optional: register the user's action in the chat
+        // Log the action as a user message so it stays visible in the conversation
         messages.value.push({
             id: crypto.randomUUID(),
             role: "user",
@@ -100,15 +104,15 @@ export function useChat() {
         setTimeout(() => {
             isTyping.value = false;
 
+            // Confirm the action back to the user
             messages.value.push({
                 id: crypto.randomUUID(),
                 role: "assistant",
                 type: "text",
                 text: `Done. "${payload.title}" redeemed (+${payload.points} pts).`,
             });
-        }, 3000);
+        }, REDEEM_CONFIRM_DELAY_MS);
     }
-
 
     return {
         messages,
@@ -118,5 +122,4 @@ export function useChat() {
         sendText,
         redeemReward,
     };
-
 }

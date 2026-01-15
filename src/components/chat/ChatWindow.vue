@@ -6,12 +6,13 @@ import MessageBubble from "./MessageBubble.vue";
 import closeWindowIcon from '../../assets/close-chat-button.icon.svg'
 
 const draftText = ref("");
+const inputRef = ref<HTMLInputElement | null>(null);
 
-// Traemos datos y funciones del composable
+// Get chat state/actions from the composable
 const { messages, isTyping, isLoadingHistory, loadHistory, sendText, redeemReward } = useChat();
 
 
-// Enviar mensaje
+// Send message
 function send() {
     const text = draftText.value.trim();
     if (!text) return;
@@ -19,7 +20,7 @@ function send() {
     draftText.value = "";
 }
 
-// Auto-scroll al último mensaje
+// Auto-scroll to the latest message
 const endRef = ref<HTMLElement | null>(null);
 watch(
     () => messages.value.length,
@@ -29,7 +30,18 @@ watch(
     }
 );
 
-// Cargar historial al montar
+// Refocus the input after the assistant finishes responding
+watch(
+    () => isTyping.value,
+    async (typing) => {
+        if (typing) return;
+        await nextTick();
+        inputRef.value?.focus();
+    }
+);
+
+
+// Load history on mount
 onMounted(() => {
     loadHistory();
 });
@@ -60,8 +72,9 @@ onMounted(() => {
 
         <!-- Footer -->
         <footer class="chat-footer">
-            <input class="chat-input" type="text" placeholder="Write a message..." v-model="draftText"
+            <input ref="inputRef" class="chat-input" type="text" placeholder="Write a message..." v-model="draftText"
                 @keydown.enter.prevent="send" :disabled="isTyping || isLoadingHistory" />
+
             <button class="send-btn" type="button" @click="send" :disabled="isTyping || isLoadingHistory">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="send-icon">
                     <path
