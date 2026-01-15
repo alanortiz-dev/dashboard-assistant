@@ -5,7 +5,20 @@ import RewardCard from "./RewardCard.vue";
 
 const props = defineProps<{
     message: ChatMessage;
+    disabled?: boolean;
 }>();
+
+const emit = defineEmits<{
+    (e: "reward-redeem", payload: { title: string; points: number }): void;
+}>();
+
+function onRewardRedeem() {
+    if (props.message.type !== "reward") return;
+    emit("reward-redeem", {
+        title: props.message.payload.title,
+        points: props.message.payload.points,
+    });
+}
 </script>
 
 <template>
@@ -17,7 +30,7 @@ const props = defineProps<{
         <!-- reward -->
         <div class="row assistant">
             <RewardCard :title="props.message.payload.title" :points="props.message.payload.points"
-                :imageUrl="props.message.payload.imageUrl" />
+                :imageUrl="props.message.payload.imageUrl" :disabled="props.disabled" @redeem="onRewardRedeem" />
         </div>
     </div>
 </template>

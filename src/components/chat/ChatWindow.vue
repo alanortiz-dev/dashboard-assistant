@@ -8,7 +8,8 @@ import closeWindowIcon from '../../assets/close-chat-button.icon.svg'
 const draftText = ref("");
 
 // Traemos datos y funciones del composable
-const { messages, isTyping, isLoadingHistory, loadHistory, sendText } = useChat();
+const { messages, isTyping, isLoadingHistory, loadHistory, sendText, redeemReward } = useChat();
+
 
 // Enviar mensaje
 function send() {
@@ -49,7 +50,9 @@ onMounted(() => {
             <p v-if="isLoadingHistory" class="history-loading">Loading chat…</p>
 
             <template v-else>
-                <MessageList :messages="messages" />
+                <MessageList :messages="messages" :disabled="isTyping || isLoadingHistory"
+                    @reward-redeem="redeemReward" />
+
                 <MessageBubble v-if="isTyping" role="assistant" text="Typing…" />
                 <div ref="endRef" />
             </template>

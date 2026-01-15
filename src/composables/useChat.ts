@@ -59,11 +59,39 @@ export function useChat() {
         }, 1000);
     }
 
+    function redeemReward(payload: { title: string; points: number }) {
+        if (isTyping.value || isLoadingHistory.value) return;
+
+        // Optional: register the user's action in the chat
+        messages.value.push({
+            id: crypto.randomUUID(),
+            role: "user",
+            type: "text",
+            text: `Redeem "${payload.title}"`,
+        });
+
+        isTyping.value = true;
+
+        setTimeout(() => {
+            isTyping.value = false;
+
+            messages.value.push({
+                id: crypto.randomUUID(),
+                role: "assistant",
+                type: "text",
+                text: `Done. "${payload.title}" redeemed (+${payload.points} pts).`,
+            });
+        }, 500);
+    }
+
+
     return {
         messages,
         isTyping,
         isLoadingHistory,
         loadHistory,
         sendText,
+        redeemReward,
     };
+
 }
